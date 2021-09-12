@@ -4,7 +4,7 @@
  *  License: MIT
  */
 
-function addWindowFunction() {
+export default function () {
   function scaleImageMap() {
     const map = this;
     let areas = null;
@@ -64,12 +64,21 @@ function addWindowFunction() {
       }
     }
 
+    function removeResizerListeners() {
+      image.removeEventListener('load', resizeMap);
+      window.removeEventListener('focus', resizeMap);
+      window.removeEventListener('resize', debounce);
+      window.removeEventListener('readystatechange', resizeMap);
+      document.removeEventListener('fullscreenchange', resizeMap);
+    }
+
     function addEventListeners() {
       image.addEventListener('load', resizeMap, false); // Detect late image loads in IE11
       window.addEventListener('focus', resizeMap, false); // Cope with window being resized whilst on another tab
       window.addEventListener('resize', debounce, false);
       window.addEventListener('readystatechange', resizeMap, false);
       document.addEventListener('fullscreenchange', resizeMap, false);
+      window.removeResizerListeners = removeResizerListeners;
     }
 
     function beenHere() {
@@ -82,7 +91,10 @@ function addWindowFunction() {
 
     function setup() {
       areas = map.getElementsByTagName('area');
+      console.log('HERE IT GOES SETUP');
       cachedAreaCoordsArray = Array.prototype.map.call(areas, getCoords);
+      console.log('cachedAreaCoordsArray');
+      console.log(cachedAreaCoordsArray);
       image = getImg(`#${map.name}`) || getImg(map.name);
       map.resize = resizeMap; // Bind resize method to HTML map element
     }
@@ -140,9 +152,4 @@ function addWindowFunction() {
   }
 
   window.imageMapResize = factory();
-}
-
-export default function () {
-  addWindowFunction();
-  window.imageMapResize();
 }
