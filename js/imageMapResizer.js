@@ -91,10 +91,7 @@ export default function () {
 
     function setup() {
       areas = map.getElementsByTagName('area');
-      console.log('HERE IT GOES SETUP');
       cachedAreaCoordsArray = Array.prototype.map.call(areas, getCoords);
-      console.log('cachedAreaCoordsArray');
-      console.log(cachedAreaCoordsArray);
       image = getImg(`#${map.name}`) || getImg(map.name);
       map.resize = resizeMap; // Bind resize method to HTML map element
     }
